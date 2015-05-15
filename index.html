@@ -1,0 +1,91 @@
+<!doctype html>
+<meta charset="utf-8" />
+<head>
+  <title>hold-to-confirm</title>
+  <style>
+    #glasses {
+      vertical-align: middle;
+    }
+    #button {
+      width: 120px;
+      height: 120px;
+      vertical-align:middle;
+      cursor: default;
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+    }
+    #circle {
+      fill: #3F51B5;
+      stroke: #C5CAE9;
+      stroke-width: 10;
+      stroke-dasharray: 314.15 314.15;
+      stroke-dashoffset: -314.15;
+      transition: stroke-dashoffset 0s linear;
+      transform: translate(60px,60px) rotate(90deg) translate(-60px,-60px);
+      -webkit-transform: translate(60px,60px) rotate(90deg) translate(-60px,-60px);
+    }
+    #button:active #circle {
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 2s linear;
+    }
+    #button.activated #circle {
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 0s linear;
+      fill: #C5CAE9;
+    }
+    #button.completed #text {
+      font-size: 36px;
+    }
+
+  </style>
+</head>
+<body>
+  <img id="glasses" src="glasses.jpg" alt="glasses" title="image credit: flickr/willvision">
+  <?xml version="1.0"?>
+  <svg id="button" viewBox="0 0 120 120" version="1.1"
+    xmlns="http://www.w3.org/2000/svg">
+
+      <filter id="dropshadow" height="130%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+        <feOffset dx="2" dy="0" result="offsetblur"/>
+        <feComponentTransfer>
+          <feFuncA type="linear" slope="0.5"/>
+        </feComponentTransfer>
+        <feMerge>
+          <feMergeNode/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+
+      <circle id="circle" cx="60" cy="60" r="50" style="filter:url(#dropshadow)"/>
+      <text id="text" x="60" y="60" font-size="24px"
+          fill="white" dominant-baseline="middle" text-anchor="middle">
+        $39.99
+      </text>
+  </svg>
+
+  <script>
+    (function(){
+      var timer;
+      var clickable = false;
+      button.addEventListener('mousedown', function(ev){
+        if (ev.button !== 0) return;
+        timer = setTimeout(function(){
+          clickable = true;
+          button.classList.add('activated');
+        }, 2000);
+      });
+      button.addEventListener('mouseup', function(){
+        clearTimeout(timer);
+        button.classList.remove('activated');
+      });
+      button.addEventListener('click', function(e){
+        if (clickable) {
+          text.textContent = "✔";
+          button.classList.add('completed');
+        }
+      });
+    })();
+  </script>
+</body>
